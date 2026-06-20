@@ -853,6 +853,12 @@
     landingEl.classList.add("hidden");
     gameEl.classList.remove("hidden");
     gameVisible = true;
+
+    pendo.track("world_selected", {
+      world_id: world.id,
+      world_name: world.name,
+      previous_best_score: best
+    });
   }
 
   function backToLanding() {
@@ -927,14 +933,29 @@
       endY: GOAL.bottom,
       endR: 9,
       arcHeight: arcHeight,
-      windDrift: windDrift
+      windDrift: windDrift,
+      power: power
     };
 
     state = "flying";
+
+    pendo.track("shot_executed", {
+      world_id: currentWorld.id,
+      world_name: currentWorld.name,
+      power_level: Math.round(power * 100) / 100,
+      aim_offset: Math.round(aimOffset),
+      wind_speed: Math.round(wind.speed),
+      wind_direction: wind.dir === 1 ? "right" : "left",
+      flight_duration: Math.round(duration),
+      arc_height: Math.round(arcHeight),
+      wind_drift_px: Math.round(windDrift),
+      current_score: score
+    });
   }
 
   function resolveShot(blocked, blockType) {
     var isGoal = false;
+    var previousScore = score;
     if (!blocked) {
       var finalX = flight.aimX + flight.windDrift;
       var margin = 6 + flight.endR;
@@ -943,12 +964,35 @@
 
     if (isGoal) {
       score += 1;
-      if (score > best) {
+      var previousBest = best;
+      var isNewBest = score > best;
+      if (isNewBest) {
         best = score;
         setBest(currentWorld.storageKey, best);
       }
       spawnGoalBurst(flight.aimX + flight.windDrift, (GOAL.top + GOAL.bottom) / 2);
       showMessage("GOALLLLLL!", "goal");
+
+      pendo.track("goal_scored", {
+        world_id: currentWorld.id,
+        world_name: currentWorld.name,
+        new_score: score,
+        is_new_best: isNewBest,
+        wind_speed: Math.round(wind.speed),
+        wind_direction: wind.dir === 1 ? "right" : "left",
+        power_level: Math.round(flight.power * 100) / 100,
+        final_ball_x: Math.round(flight.aimX + flight.windDrift)
+      });
+
+      if (isNewBest) {
+        pendo.track("high_score_achieved", {
+          world_id: currentWorld.id,
+          world_name: currentWorld.name,
+          new_best_score: best,
+          previous_best_score: previousBest,
+          score_improvement: best - previousBest
+        });
+      }
     } else {
       score = 0;
       if (blockType === "tumbleweed") {
@@ -961,6 +1005,17 @@
         showMessage("BLASTED!", "hit");
       } else {
         showMessage("NOOOO...", "miss");
+
+        pendo.track("shot_missed", {
+          world_id: currentWorld.id,
+          world_name: currentWorld.name,
+          streak_lost: previousScore,
+          wind_speed: Math.round(wind.speed),
+          wind_direction: wind.dir === 1 ? "right" : "left",
+          final_ball_x: Math.round(flight.aimX + flight.windDrift),
+          goal_left_x: Math.round(GOAL.left),
+          goal_right_x: Math.round(GOAL.right)
+        });
       }
     }
     updateTopbar();
@@ -2024,6 +2079,18 @@
         drawBall(bx, by, br);
         spawnHitSpark(bx, by);
         drawParticles();
+
+        pendo.track("obstacle_collision", {
+          world_id: currentWorld.id,
+          world_name: currentWorld.name,
+          obstacle_type: id === "desert" ? "tumbleweed" : id === "windy" ? "lava" : id === "rainy" ? "ship" : "blast",
+          streak_lost: score,
+          collision_x: Math.round(bx),
+          collision_y: Math.round(by),
+          wind_speed: Math.round(wind.speed),
+          wind_direction: wind.dir === 1 ? "right" : "left"
+        });
+
         if (id === "desert") {
           hitObstacle.hit = true;
           hitObstacle.hitAt = now;
