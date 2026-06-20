@@ -459,11 +459,17 @@
 (function () {
   "use strict";
 
-  pendo.initialize({
-    visitor: {
-      id: ''
+  if (window.pendo) {
+    try {
+      pendo.initialize({
+        visitor: {
+          id: ''
+        }
+      });
+    } catch (e) {
+      // analytics must never be able to break the game
     }
-  });
+  }
 
   // ---------------------------------------------------------------
   // World definitions
