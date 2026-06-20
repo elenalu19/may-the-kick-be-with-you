@@ -470,7 +470,7 @@
   // ---------------------------------------------------------------
   var WORLDS = [
     { id: "windy",   name: "Mustafar",   storageKey: "windy",   color: "#ff3d1f" },
-    { id: "airport", name: "Death Star", storageKey: "airport", color: "#39ff6a" },
+    { id: "airport", name: "Outer Rim", storageKey: "airport", color: "#39ff6a" },
     { id: "rainy",   name: "Coruscant",  storageKey: "rain",    color: "#8b5cf6" },
     { id: "desert",  name: "Tatooine",   storageKey: "desert",  color: "#ffb347" }
   ];
@@ -626,8 +626,8 @@
   var lavaVents = []; // Mustafar's eruption hazards (transient): { x, w, h, state, warnEndAt, eruptStartAt, eruptEndAt }
   var nextEruptionAt = 0; // when the next randomized eruption telegraph spawns
   var ships = []; // Coruscant traffic obstacles: { x, dir, speed, w, h, hit, hitAt, hitX }
-  var blasts = []; // Death Star TIE blaster bolts: { x, y, vx, vy, w, h, hit, hitAt, hitX }
-  var tieFighters = []; // Death Star's mobile fighters: { x, y, dir, speed, bobPhase, flashUntil }
+  var blasts = []; // Outer Rim TIE blaster bolts: { x, y, vx, vy, w, h, hit, hitAt, hitX }
+  var tieFighters = []; // Outer Rim's mobile fighters: { x, y, dir, speed, bobPhase, flashUntil }
 
   var nextWindShiftAt = 0;
   var nextBlastAt = 0;
@@ -1308,7 +1308,7 @@
   }
 
   function drawAirportBackground() {
-    // Death Star -- the trench floor of a moon-sized battle station, adrift in space
+    // Outer Rim -- the trench floor of a moon-sized battle station, adrift in space
     ctx.fillStyle = "#04050a";
     ctx.fillRect(0, 0, W, GROUND_Y);
 
