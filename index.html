@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>May the Kick Be With You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+
+  :root {
+    --bg-void: #07060f;
+    --bg-deep: #0c0a1a;
+    --neon-cyan: #29e0ff;
+    --neon-magenta: #ff2bd6;
+    --neon-blue: #4d7bff;
+    --neon-orange: #ff5f8a;
+    --neon-violet: #8b5cf6;
+    --neon-lime: #c6ff3d;
+    --neon-yellow: #ffe93d;
+    --neon-lava: #ff3d1f;
+    --neon-amber: #ffb347;
+    --neon-blaster: #39ff6a;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-void);
+    font-family: 'Rajdhani', 'Segoe UI', Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .hidden { display: none !important; }
+
+  /* ---------- Landing screen ---------- */
+  #landing {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(255, 43, 214, 0.18) 0%, rgba(255,43,214,0) 55%),
+      radial-gradient(ellipse at 15% 85%, rgba(41, 224, 255, 0.16) 0%, rgba(41,224,255,0) 55%),
+      radial-gradient(ellipse at center, var(--bg-deep) 0%, var(--bg-void) 85%);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    overflow: hidden;
+    animation: screenFadeIn 0.5s ease both;
+  }
+
+  #landing::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(to right, rgba(255,255,255,0.05) 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(to bottom, rgba(255,255,255,0.05) 0 1px, transparent 1px 56px);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.9) 55%, transparent 100%);
+    opacity: 0.5;
+  }
+
+  #landing h1 {
+    font-family: 'Orbitron', 'Trebuchet MS', sans-serif;
+    font-size: clamp(26px, 4.2vw, 46px);
+    font-weight: 900;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    margin: 0;
+    position: relative;
+    color: #fff;
+    background: linear-gradient(92deg, var(--neon-cyan), var(--neon-magenta) 55%, var(--neon-yellow));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 14px rgba(41, 224, 255, 0.55)) drop-shadow(0 0 26px rgba(255, 43, 214, 0.35));
+    animation: titleFlicker 4.5s ease-in-out infinite;
+  }
+
+  @keyframes titleFlicker {
+    0%, 92%, 100% { opacity: 1; }
+    94% { opacity: 0.82; }
+    96% { opacity: 1; }
+    97% { opacity: 0.88; }
+  }
+
+  #landing p.tagline {
+    margin: 10px 0 36px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--neon-cyan);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(41, 224, 255, 0.6);
+  }
+
+  #worldGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 150px);
+    grid-template-rows: repeat(2, auto);
+    gap: 22px;
+    position: relative;
+  }
+
+  .world-card {
+    --accent: #29e0ff;
+    background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
+    backdrop-filter: blur(6px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 16px 10px 12px 10px;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    user-select: none;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: cardIn 0.45s ease forwards;
+    animation-delay: calc(var(--i) * 0.07s);
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+  }
+
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .world-card:hover {
+    transform: translateY(-6px) scale(1.05);
+    border-color: var(--accent);
+    background: linear-gradient(160deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+    box-shadow: 0 0 18px -2px var(--accent), 0 8px 24px rgba(0,0,0,0.45);
+  }
+
+  .trophy-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    filter: drop-shadow(0 0 6px var(--accent)) drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+  }
+
+  .trophy-icon svg {
+    display: block;
+  }
+
+  .world-name {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+  }
+
+  .world-best {
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9a9ab0;
+  }
+
+  @keyframes screenFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ---------- Game screen ---------- */
+  #game {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    animation: screenFadeIn 0.4s ease both;
+  }
+
+  #game::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 4;
+    box-shadow: inset 0 0 140px rgba(0,0,0,0.85);
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(7,6,15,0.55) 100%);
+  }
+
+  #topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    padding: 14px 22px;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  #topbar span {
+    font-family: 'Orbitron', 'Trebuchet MS', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff;
+    background: rgba(10, 8, 20, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    padding: 8px 16px;
+    backdrop-filter: blur(4px);
+    text-shadow: 0 0 8px rgba(41, 224, 255, 0.5);
+  }
+
+  #scoreLabel {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 10px rgba(255, 233, 61, 0.65);
+    border-color: rgba(255, 233, 61, 0.35) !important;
+  }
+
+  #bestLabel {
+    text-shadow: 0 0 10px rgba(41, 224, 255, 0.55);
+    border-color: rgba(41, 224, 255, 0.3) !important;
+  }
+
+  #canvas {
+    width: 100%;
+    height: 100%;
+    max-width: 1000px;
+    max-height: 700px;
+    display: block;
+    cursor: pointer;
+  }
+
+  #changeWorldBtn {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    padding: 11px 20px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(10, 8, 20, 0.65);
+    color: #fff;
+    border: 2px solid var(--neon-magenta);
+    border-radius: 999px;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 0 12px -2px rgba(255, 43, 214, 0.7);
+    transition: box-shadow 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+
+  #changeWorldBtn:hover {
+    background: rgba(10, 8, 20, 0.85);
+    box-shadow: 0 0 22px 0px rgba(255, 43, 214, 0.95);
+    transform: translateY(-1px);
+  }
+
+  #message {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.6) rotate(-2deg);
+    font-family: 'Orbitron', 'Trebuchet MS', sans-serif;
+    font-size: 54px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s cubic-bezier(.2,1.4,.4,1), transform 0.32s cubic-bezier(.2,1.6,.3,1);
+    z-index: 6;
+    white-space: nowrap;
+  }
+
+  #message.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08) rotate(0deg);
+  }
+
+  #message.goal {
+    color: var(--neon-lime);
+    text-shadow: 0 0 14px rgba(198, 255, 61, 0.85), 0 0 34px rgba(198, 255, 61, 0.5), 0 4px 0 rgba(0,0,0,0.4);
+  }
+  #message.miss {
+    color: var(--neon-orange);
+    text-shadow: 0 0 14px rgba(255, 95, 138, 0.85), 0 0 34px rgba(255, 95, 138, 0.5), 0 4px 0 rgba(0,0,0,0.4);
+  }
+  #message.hit {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 14px rgba(255, 233, 61, 0.85), 0 0 34px rgba(255, 233, 61, 0.5), 0 4px 0 rgba(0,0,0,0.4);
+  }
+</style>
+</head>
+<body>
+
+  <!-- LANDING SCREEN -->
+  <div id="landing">
+    <h1>MAY THE KICK BE WITH YOU</h1>
+    <p class="tagline">Choose Your World</p>
+    <div id="worldGrid"></div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game" class="hidden">
+    <div id="topbar">
+      <span id="bestLabel">Best: 0</span>
+      <span id="scoreLabel">Score: 0</span>
+    </div>
+    <canvas id="canvas" width="800" height="500"></canvas>
+    <button id="changeWorldBtn">Change World</button>
+    <div id="message"></div>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------------------------------------------------------------
+  // World definitions
+  // ---------------------------------------------------------------
+  var WORLDS = [
+    { id: "windy",   name: "Mustafar",   storageKey: "windy",   color: "#ff3d1f" },
+    { id: "airport", name: "Death Star", storageKey: "airport", color: "#39ff6a" },
+    { id: "rainy",   name: "Coruscant",  storageKey: "rain",    color: "#8b5cf6" },
+    { id: "desert",  name: "Tatooine",   storageKey: "desert",  color: "#ffb347" }
+  ];
+
+  function getBest(storageKey) {
+    var v = localStorage.getItem("worldkick_" + storageKey + "_best");
+    return v ? parseInt(v, 10) : 0;
+  }
+
+  function setBest(storageKey, value) {
+    localStorage.setItem("worldkick_" + storageKey + "_best", String(value));
+  }
+
+  function trophySvg(color) {
+    return (
+      '<svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M18 14c-7 0-11 5-9 11s8 8 12 7" fill="none" stroke="' + color + '" stroke-width="4" stroke-linecap="round"/>' +
+        '<path d="M46 14c7 0 11 5 9 11s-8 8-12 7" fill="none" stroke="' + color + '" stroke-width="4" stroke-linecap="round"/>' +
+        '<path d="M18 10h28v14c0 11-6.5 18-14 18s-14-7-14-18V10z" fill="' + color + '"/>' +
+        '<rect x="26" y="46" width="12" height="8" rx="1" fill="' + color + '"/>' +
+        '<rect x="18" y="54" width="28" height="6" rx="2" fill="' + color + '"/>' +
+      '</svg>'
+    );
+  }
+
+  // ---------------------------------------------------------------
+  // DOM references
+  // ---------------------------------------------------------------
+  var landingEl = document.getElementById("landing");
+  var gameEl = document.getElementById("game");
+  var worldGridEl = document.getElementById("worldGrid");
+  var bestLabelEl = document.getElementById("bestLabel");
+  var scoreLabelEl = document.getElementById("scoreLabel");
+  var changeWorldBtn = document.getElementById("changeWorldBtn");
+  var messageEl = document.getElementById("message");
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+
+  // ---------------------------------------------------------------
+  // Build landing screen trophy grid
+  // ---------------------------------------------------------------
+  function renderLanding() {
+    worldGridEl.innerHTML = "";
+    WORLDS.forEach(function (world, idx) {
+      var card = document.createElement("div");
+      card.className = "world-card";
+      card.style.setProperty("--accent", world.color);
+      card.style.setProperty("--i", idx);
+
+      var icon = document.createElement("div");
+      icon.className = "trophy-icon";
+      icon.innerHTML = trophySvg(world.color);
+
+      var name = document.createElement("div");
+      name.className = "world-name";
+      name.textContent = world.name;
+
+      var best = document.createElement("div");
+      best.className = "world-best";
+      best.textContent = "Best: " + getBest(world.storageKey);
+
+      card.appendChild(icon);
+      card.appendChild(name);
+      card.appendChild(best);
+
+      card.addEventListener("click", function () {
+        startGame(world);
+      });
+
+      worldGridEl.appendChild(card);
+    });
+  }
+
+  // ---------------------------------------------------------------
+  // Game state
+  // ---------------------------------------------------------------
+  var currentWorld = null;
+  var score = 0;
+  var best = 0;
+
+  var W = canvas.width;   // 800
+  var H = canvas.height;  // 500
+  var GROUND_Y = H * 0.64; // where grass starts
+
+  var GOAL = {
+    left: W / 2 - 110,
+    right: W / 2 + 110,
+    top: GROUND_Y - 110,
+    bottom: GROUND_Y,
+    postThickness: 6
+  };
+
+  var BALL_START = { x: W / 2, y: H - 55, r: 22 };
+  var OBSTACLE_Y = GOAL.bottom + 60; // ground-level plane obstacles cross/erupt along
+
+  var ball = { x: BALL_START.x, y: BALL_START.y, r: BALL_START.r };
+
+  // state: 'idle' | 'charging' | 'flying' | 'result'
+  var state = "idle";
+  var chargeStartTime = 0;
+  var aimX = BALL_START.x;
+
+  var POWER_LOOP_MS = 1800; // time for the power meter to fill once before looping (50% slower)
+  function getPowerLevel(now) {
+    var cyclePos = (now - chargeStartTime) % POWER_LOOP_MS;
+    return cyclePos / POWER_LOOP_MS; // 0..1 sawtooth, loops while held
+  }
+
+  var flight = null; // {startTime, duration, startX, startY, startR, endX, endY, endR, arcHeight}
+  var ballTrail = []; // recent {x,y,r} positions while flying, for the neon motion trail
+
+  var hitFreezeBall = null; // {x,y,r} -- where to hold the ball after an obstacle collision
+  var burstTumbleweed = null; // the tumbleweed object currently shown exploded into twigs
+  var disabledShip = null; // the Coruscant traffic ship currently shown knocked out
+
+  var messageTimeout = null;
+
+  var gameVisible = false;
+
+  // ---------------------------------------------------------------
+  // Wind (Windy Day only, for now)
+  // ---------------------------------------------------------------
+  var WIND_DRIFT_PX_PER_MPH_PER_SEC = 26;
+  var wind = { speed: 0, dir: 1 }; // dir: 1 = blowing right, -1 = blowing left
+
+  function isWindEnabled() {
+    return !!currentWorld;
+  }
+
+  function rollWind() {
+    wind.speed = Math.floor(Math.random() * 10) + 3; // 3-12 MPH
+    wind.dir = Math.random() < 0.5 ? -1 : 1;
+  }
+
+  function rollRainyWind() {
+    wind.speed = randInt(8, 12);
+    wind.dir = randSign();
+  }
+
+  function computeWindDriftPx(durationMs) {
+    if (!isWindEnabled() || wind.speed <= 0) return 0;
+    return wind.dir * wind.speed * WIND_DRIFT_PX_PER_MPH_PER_SEC * (durationMs / 1000);
+  }
+
+  // ---------------------------------------------------------------
+  // Per-world systems: fighters, tumbleweeds, ships, lava vents,
+  // and the static decor (buildings/dunes/lights) each world needs.
+  // ---------------------------------------------------------------
+  var tumbleweeds = [];
+  var lavaVents = []; // Mustafar's eruption hazards (transient): { x, w, h, state, warnEndAt, eruptStartAt, eruptEndAt }
+  var nextEruptionAt = 0; // when the next randomized eruption telegraph spawns
+  var ships = []; // Coruscant traffic obstacles: { x, dir, speed, w, h, hit, hitAt, hitX }
+  var blasts = []; // Death Star TIE blaster bolts: { x, y, vx, vy, w, h, hit, hitAt, hitX }
+  var tieFighters = []; // Death Star's mobile fighters: { x, y, dir, speed, bobPhase, flashUntil }
+
+  var nextWindShiftAt = 0;
+  var nextBlastAt = 0;
+  var nextTieFighterAt = 0;
+  var nextTumbleweedAt = 0;
+  var nextShipAt = 0;
+
+  var desertWindTarget = 18;
+  var desertNextRetarget = 0;
+
+  var bgDecor = { buildings: [], farBuildings: [], dunes: [], lights: [] };
+
+  function spawnOneShip() {
+    var dir = randSign();
+    var x = dir === 1 ? -50 : W + 50;
+    ships.push({ x: x, dir: dir, speed: randRange(90, 220), w: 46, h: 16 }); // zippy Coruscant traffic lanes
+  }
+
+  function initWorldExtras(world, now) {
+    tumbleweeds = [];
+    lavaVents = [];
+    ships = [];
+    blasts = [];
+    tieFighters = [];
+    bgDecor = { buildings: [], farBuildings: [], dunes: [], lights: [] };
+
+    switch (world.id) {
+      case "windy":
+        rollWind();
+        nextEruptionAt = now + randRange(500, 1500);
+        break;
+
+      case "airport":
+        wind.speed = randRange(5, 12);
+        wind.dir = randSign();
+        nextWindShiftAt = now + randRange(6000, 9000);
+        nextBlastAt = now + randRange(900, 1300);
+        nextTieFighterAt = now + randRange(1500, 2500);
+        // seed a couple of fighters already mid-screen so it's never empty on entry
+        var tieSeedCount = randInt(2, 3);
+        for (var ti = 0; ti < tieSeedCount; ti++) {
+          tieFighters.push(makeTieFighter(randRange(60, W - 60)));
+        }
+        break;
+
+      case "rainy":
+        rollRainyWind();
+        for (var l = 0; l < 6; l++) {
+          bgDecor.lights.push({
+            x: randRange(20, W - 20),
+            y: randRange(GROUND_Y * 0.2, GROUND_Y * 0.7),
+            r: randRange(20, 45)
+          });
+        }
+        // distant hazy skyline -- dense, short-to-tall, low contrast for depth
+        var fx = -20;
+        while (fx < W + 20) {
+          var fw = randRange(30, 55);
+          bgDecor.farBuildings.push({
+            x: fx,
+            w: fw,
+            h: randRange(70, 170)
+          });
+          fx += fw + randRange(2, 8);
+        }
+        // near skyline -- tall glowing spires, the city proper
+        var cx = -20;
+        while (cx < W + 20) {
+          var cw = randRange(46, 80);
+          bgDecor.buildings.push({
+            x: cx,
+            w: cw,
+            h: randRange(140, 280),
+            color: ["#221a38", "#2a1f42", "#1c1530", "#251c3c"][randInt(0, 3)]
+          });
+          cx += cw + randRange(6, 16);
+        }
+        // seed a ship or two already mid-flight so the skylane is never empty on entry
+        var shipSeedCount = randInt(1, 2);
+        for (var si = 0; si < shipSeedCount; si++) {
+          ships.push({
+            x: randRange(40, W - 40),
+            dir: randSign(),
+            speed: randRange(90, 220),
+            w: 46,
+            h: 16
+          });
+        }
+        nextShipAt = now + randRange(1200, 2800);
+        break;
+
+      case "desert":
+        wind.dir = randSign();
+        wind.speed = randRange(8, 12);
+        desertWindTarget = wind.speed;
+        desertNextRetarget = now + randRange(2000, 4000);
+        nextTumbleweedAt = now + randRange(800, 2000);
+        for (var d = 0; d < 4; d++) {
+          bgDecor.dunes.push({ x: randRange(0, W), w: randRange(180, 320), h: randRange(20, 50) });
+        }
+        break;
+
+      default:
+        wind.speed = 0;
+        wind.dir = 1;
+    }
+  }
+
+  function roundReset() {
+    switch (currentWorld.id) {
+      case "windy":
+        rollWind();
+        break;
+      case "rainy":
+        rollRainyWind();
+        break;
+    }
+  }
+
+  function updateWorldDynamics(now, dt) {
+    if (!currentWorld) return;
+    switch (currentWorld.id) {
+      case "windy":
+        updateMustafar(now, dt);
+        break;
+      case "airport":
+        updateDeathStar(now, dt);
+        break;
+      case "desert":
+        updateDesert(now, dt);
+        break;
+      case "rainy":
+        updateCoruscant(now, dt);
+        break;
+    }
+  }
+
+  function updateCoruscant(now, dt) {
+    ships.forEach(function (s) {
+      if (s.hit) return; // disabled -- stays put until the round resets
+      s.x += s.dir * s.speed * (dt / 1000);
+    });
+    ships = ships.filter(function (s) {
+      return s.hit || (s.x > -90 && s.x < W + 90);
+    });
+    if (now >= nextShipAt && ships.length < 3) {
+      spawnOneShip(); // staggered traffic, never all crossing at once
+      nextShipAt = now + randRange(1200, 2800);
+    }
+  }
+
+  function updateMustafar(now, dt) {
+    // randomized, spread-out eruption telegraphs: a warning triangle appears,
+    // then exactly 1s later lava actually erupts and can block the ball.
+    if (now >= nextEruptionAt && lavaVents.length < 2) {
+      lavaVents.push({
+        x: randRange(80, W - 80),
+        w: 50,
+        h: 150,
+        state: "warning",
+        warnEndAt: now + 1000,
+        eruptStartAt: 0,
+        eruptEndAt: 0
+      });
+      nextEruptionAt = now + randRange(900, 2200);
+    }
+
+    for (var i = lavaVents.length - 1; i >= 0; i--) {
+      var v = lavaVents[i];
+      if (v.state === "warning" && now >= v.warnEndAt) {
+        v.state = "erupting";
+        v.eruptStartAt = now;
+        v.eruptEndAt = now + randRange(600, 900);
+      } else if (v.state === "erupting") {
+        if (now >= v.eruptEndAt) {
+          lavaVents.splice(i, 1);
+          continue;
+        }
+        if (Math.random() < 0.5) spawnEmbers(v.x, GROUND_Y - 10);
+      }
+    }
+  }
+
+  function makeTieFighter(startX) {
+    var dir = randSign();
+    return {
+      x: startX !== undefined ? startX : (dir === 1 ? -40 : W + 40),
+      y: randRange(45, GROUND_Y * 0.6),
+      dir: dir,
+      speed: randRange(55, 125),
+      bobPhase: Math.random() * Math.PI * 2,
+      flashUntil: 0
+    };
+  }
+
+  function updateDeathStar(now, dt) {
+    // ambient deflector turbulence -- an instant wind shift on its own slower timer,
+    // unrelated to blaster fire, capped to stay within a fair, scorable range
+    if (now >= nextWindShiftAt) {
+      var shifted = randRange(5, 12);
+      if (Math.abs(shifted - wind.speed) < 4) {
+        shifted = clamp(shifted + (Math.random() < 0.5 ? -6 : 6), 5, 12);
+      }
+      wind.speed = shifted;
+      wind.dir = randSign();
+      nextWindShiftAt = now + randRange(6000, 9000);
+    }
+
+    // keep 2-4 TIE fighters roaming the screen at all times
+    tieFighters.forEach(function (f) {
+      f.x += f.dir * f.speed * (dt / 1000);
+    });
+    tieFighters = tieFighters.filter(function (f) {
+      return f.x > -60 && f.x < W + 60;
+    });
+    if (tieFighters.length < 2 || (tieFighters.length < 4 && now >= nextTieFighterAt)) {
+      tieFighters.push(makeTieFighter());
+      nextTieFighterAt = now + randRange(1500, 2800);
+    }
+
+    // TIE fighters fire all over the place, frequently and from multiple ships at once
+    if (now >= nextBlastAt && tieFighters.length) {
+      var volleyCount = tieFighters.length > 1 && Math.random() < 0.5 ? 2 : 1;
+      for (var vi = 0; vi < volleyCount; vi++) {
+        var shooter = tieFighters[randInt(0, tieFighters.length - 1)];
+        shooter.flashUntil = now + 150;
+        var fy = shooter.y + Math.sin(now * 0.003 + shooter.bobPhase) * 14;
+        var targetX = randRange(W * 0.15, W * 0.85);
+        var targetY = OBSTACLE_Y + randRange(-20, 40);
+        var ang = Math.atan2(targetY - fy, targetX - shooter.x);
+        var speed = randRange(300, 420);
+        blasts.push({
+          x: shooter.x,
+          y: fy,
+          vx: Math.cos(ang) * speed,
+          vy: Math.sin(ang) * speed,
+          w: 28,
+          h: 8
+        });
+      }
+      nextBlastAt = now + randRange(700, 1100);
+    }
+
+    blasts.forEach(function (b) {
+      if (b.hit) return;
+      b.x += b.vx * (dt / 1000);
+      b.y += b.vy * (dt / 1000);
+    });
+    blasts = blasts.filter(function (b) {
+      return b.hit || (b.x > -60 && b.x < W + 60 && b.y > -60 && b.y < H + 60);
+    });
+  }
+
+  function updateDesert(now, dt) {
+    if (now >= desertNextRetarget) {
+      desertWindTarget = randRange(8, 12);
+      wind.dir = randSign(); // let the desert wind flip between blowing left and right
+      desertNextRetarget = now + randRange(2000, 4000);
+    }
+    wind.speed += (desertWindTarget - wind.speed) * Math.min(1, dt / 800);
+
+    if (now >= nextTumbleweedAt) {
+      var twDir = randSign();
+      tumbleweeds.push({
+        x: twDir === 1 ? -40 : W + 40,
+        dir: twDir,
+        speed: randRange(55, 130),
+        spin: 0,
+        r: randRange(9, 22)
+      });
+      nextTumbleweedAt = now + randRange(1200, 2500);
+    }
+    tumbleweeds.forEach(function (tw) {
+      if (tw.hit) return; // knocked away on impact -- stays put until the round resets
+      tw.x += tw.dir * tw.speed * (dt / 1000);
+      tw.spin += tw.dir * dt * 0.01;
+    });
+    tumbleweeds = tumbleweeds.filter(function (tw) {
+      return tw.hit || (tw.x > -60 && tw.x < W + 60);
+    });
+  }
+
+  function checkObstacleCollision(bx, by, br) {
+    var list = null;
+    if (currentWorld.id === "desert") list = tumbleweeds;
+    else if (currentWorld.id === "rainy") list = ships;
+    else if (currentWorld.id === "airport") list = blasts;
+    else if (currentWorld.id === "windy") {
+      list = lavaVents.filter(function (v) { return v.state === "erupting"; });
+    }
+    if (!list || !list.length) return null;
+
+    for (var i = 0; i < list.length; i++) {
+      var o = list[i];
+      if (o.falling || o.hit) continue;
+      var halfW = (o.w || o.r * 2 || 20) / 2;
+      var halfH = (o.h || o.r * 2 || 20) / 2;
+      if (Math.abs(by - OBSTACLE_Y) < (br + halfH) && Math.abs(bx - o.x) < (br + halfW)) {
+        return o;
+      }
+    }
+    return null;
+  }
+
+  // ---------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------
+  function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function randRange(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function randInt(min, max) {
+    return Math.floor(randRange(min, max + 1));
+  }
+
+  function randSign() {
+    return Math.random() < 0.5 ? -1 : 1;
+  }
+
+  function getCanvasPos(evt) {
+    var rect = canvas.getBoundingClientRect();
+    var scaleX = canvas.width / rect.width;
+    var scaleY = canvas.height / rect.height;
+    return {
+      x: (evt.clientX - rect.left) * scaleX,
+      y: (evt.clientY - rect.top) * scaleY
+    };
+  }
+
+  // ---------------------------------------------------------------
+  // Start / switch screens
+  // ---------------------------------------------------------------
+  function startGame(world) {
+    currentWorld = world;
+    score = 0;
+    best = getBest(world.storageKey);
+    updateTopbar();
+    resetBall();
+    initWorldExtras(world, performance.now());
+    state = "idle";
+    landingEl.classList.add("hidden");
+    gameEl.classList.remove("hidden");
+    gameVisible = true;
+  }
+
+  function backToLanding() {
+    gameVisible = false;
+    clearTimeout(messageTimeout);
+    messageEl.className = "";
+    messageEl.classList.remove("show");
+    gameEl.classList.add("hidden");
+    landingEl.classList.remove("hidden");
+    renderLanding();
+  }
+
+  changeWorldBtn.addEventListener("click", backToLanding);
+
+  function updateTopbar() {
+    bestLabelEl.textContent = "Best: " + best;
+    scoreLabelEl.textContent = "Score: " + score;
+  }
+
+  function resetBall() {
+    ball.x = BALL_START.x;
+    ball.y = BALL_START.y;
+    ball.r = BALL_START.r;
+    aimX = BALL_START.x;
+  }
+
+  // ---------------------------------------------------------------
+  // Input handling (click & hold to charge, move to aim, release to shoot)
+  // ---------------------------------------------------------------
+  canvas.addEventListener("mousedown", function (evt) {
+    if (state !== "idle") return;
+    var pos = getCanvasPos(evt);
+    var dx = pos.x - ball.x;
+    var dy = pos.y - ball.y;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist <= ball.r + 18) {
+      state = "charging";
+      chargeStartTime = performance.now();
+      aimX = pos.x;
+    }
+  });
+
+  window.addEventListener("mousemove", function (evt) {
+    if (state !== "charging") return;
+    var pos = getCanvasPos(evt);
+    aimX = pos.x;
+  });
+
+  window.addEventListener("mouseup", function () {
+    if (state !== "charging") return;
+    shoot();
+  });
+
+  function shoot() {
+    ballTrail = [];
+    var power = getPowerLevel(performance.now()); // meter level at the moment of release
+
+    var aimOffset = clamp(aimX - BALL_START.x, -260, 260);
+    var targetX = clamp(BALL_START.x + aimOffset, 60, W - 60);
+
+    var duration = lerp(1100, 600, power) / 0.7;  // more power = faster flight; 30% slower overall
+    var arcHeight = lerp(70, 230, power);   // more power = higher arc
+    var windDrift = computeWindDriftPx(duration); // slower flight = more time for wind to act
+
+    flight = {
+      startTime: performance.now(),
+      duration: duration,
+      startX: ball.x,
+      startY: ball.y,
+      startR: ball.r,
+      aimX: targetX,
+      endY: GOAL.bottom,
+      endR: 9,
+      arcHeight: arcHeight,
+      windDrift: windDrift
+    };
+
+    state = "flying";
+  }
+
+  function resolveShot(blocked, blockType) {
+    var isGoal = false;
+    if (!blocked) {
+      var finalX = flight.aimX + flight.windDrift;
+      var margin = 6 + flight.endR;
+      isGoal = finalX > GOAL.left + margin && finalX < GOAL.right - margin;
+    }
+
+    if (isGoal) {
+      score += 1;
+      if (score > best) {
+        best = score;
+        setBest(currentWorld.storageKey, best);
+      }
+      spawnGoalBurst(flight.aimX + flight.windDrift, (GOAL.top + GOAL.bottom) / 2);
+      showMessage("GOALLLLLL!", "goal");
+    } else {
+      score = 0;
+      if (blockType === "tumbleweed") {
+        showMessage("DROID DOWN!", "hit");
+      } else if (blockType === "lava") {
+        showMessage("ERUPTION!", "hit");
+      } else if (blockType === "ship") {
+        showMessage("SHIP DOWN!", "hit");
+      } else if (blockType === "blast") {
+        showMessage("BLASTED!", "hit");
+      } else {
+        showMessage("NOOOO...", "miss");
+      }
+    }
+    updateTopbar();
+
+    state = "result";
+    clearTimeout(messageTimeout);
+    messageTimeout = setTimeout(function () {
+      messageEl.classList.remove("show");
+      resetBall();
+      roundReset(); // wind/obstacles change for the next round, per world
+      flight = null;
+      ballTrail = [];
+      hitFreezeBall = null;
+      if (burstTumbleweed) {
+        tumbleweeds = tumbleweeds.filter(function (tw) { return tw !== burstTumbleweed; });
+        burstTumbleweed = null;
+      }
+      if (disabledShip) {
+        ships = ships.filter(function (s) { return s !== disabledShip; });
+        disabledShip = null;
+      }
+      state = "idle";
+    }, 1200);
+  }
+
+  function showMessage(text, cls) {
+    messageEl.textContent = text;
+    messageEl.className = cls;
+    // force reflow so the show transition re-triggers each time
+    void messageEl.offsetWidth;
+    messageEl.classList.add("show");
+  }
+
+  // ---------------------------------------------------------------
+  // Particle effects (purely visual -- goal confetti, hit sparks)
+  // ---------------------------------------------------------------
+  var particles = [];
+  var CONFETTI_COLORS = ["#29e0ff", "#ff2bd6", "#ffe93d", "#c6ff3d", "#8b5cf6", "#ff5f8a"];
+
+  function spawnGoalBurst(x, y) {
+    for (var i = 0; i < 46; i++) {
+      var ang = Math.random() * Math.PI * 2;
+      var speed = randRange(80, 320);
+      particles.push({
+        x: x, y: y,
+        vx: Math.cos(ang) * speed,
+        vy: Math.sin(ang) * speed - 120,
+        life: 0,
+        maxLife: randRange(650, 1100),
+        size: randRange(3, 6),
+        color: CONFETTI_COLORS[randInt(0, CONFETTI_COLORS.length - 1)],
+        gravity: 420,
+        spin: randRange(-8, 8),
+        kind: "confetti"
+      });
+    }
+  }
+
+  function spawnHitSpark(x, y) {
+    for (var i = 0; i < 18; i++) {
+      var ang = Math.random() * Math.PI * 2;
+      var speed = randRange(120, 260);
+      particles.push({
+        x: x, y: y,
+        vx: Math.cos(ang) * speed,
+        vy: Math.sin(ang) * speed,
+        life: 0,
+        maxLife: randRange(300, 500),
+        size: randRange(2, 4),
+        color: "#ffe93d",
+        gravity: 180,
+        spin: 0,
+        kind: "spark"
+      });
+    }
+  }
+
+  function spawnEmbers(x, y) {
+    particles.push({
+      x: x + randRange(-14, 14), y: y,
+      vx: randRange(-20, 20),
+      vy: randRange(-260, -160),
+      life: 0,
+      maxLife: randRange(450, 750),
+      size: randRange(2, 4),
+      color: Math.random() < 0.5 ? "#ff3d1f" : "#ffb347",
+      gravity: 260,
+      spin: 0,
+      kind: "spark"
+    });
+  }
+
+  function updateParticles(dt) {
+    if (!particles.length) return;
+    var dtS = dt / 1000;
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.life += dt;
+      if (p.life >= p.maxLife) {
+        particles.splice(i, 1);
+        continue;
+      }
+      p.vy += p.gravity * dtS;
+      p.x += p.vx * dtS;
+      p.y += p.vy * dtS;
+    }
+  }
+
+  function drawParticles() {
+    if (!particles.length) return;
+    ctx.save();
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      var t = p.life / p.maxLife;
+      ctx.globalAlpha = 1 - t;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = p.kind === "confetti" ? 6 : 10;
+      ctx.fillStyle = p.color;
+      if (p.kind === "confetti") {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.spin * t * Math.PI);
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      } else {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  // ---------------------------------------------------------------
+  // Drawing
+  // ---------------------------------------------------------------
+  function drawField() {
+    // Mustafar -- dark ash sky with a distant volcanic glow on the horizon
+    var skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+    skyGrad.addColorStop(0, "#1a0907");
+    skyGrad.addColorStop(0.6, "#3a1208");
+    skyGrad.addColorStop(1, "#7a1f0a");
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, W, GROUND_Y);
+
+    var horizonGlow = ctx.createRadialGradient(W / 2, GROUND_Y, 10, W / 2, GROUND_Y, 220);
+    horizonGlow.addColorStop(0, "rgba(255, 100, 30, 0.5)");
+    horizonGlow.addColorStop(1, "rgba(255, 100, 30, 0)");
+    ctx.fillStyle = horizonGlow;
+    ctx.fillRect(W / 2 - 220, GROUND_Y - 200, 440, 230);
+
+    // distant volcano silhouettes
+    ctx.save();
+    ctx.fillStyle = "#1a0a06";
+    ctx.beginPath();
+    ctx.moveTo(W * 0.08, GROUND_Y);
+    ctx.lineTo(W * 0.18, GROUND_Y - 90);
+    ctx.lineTo(W * 0.28, GROUND_Y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(W * 0.68, GROUND_Y);
+    ctx.lineTo(W * 0.8, GROUND_Y - 120);
+    ctx.lineTo(W * 0.92, GROUND_Y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.shadowColor = "#ff3d1f";
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = "#ff3d1f";
+    ctx.beginPath();
+    ctx.arc(W * 0.8, GROUND_Y - 120, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // scorched rock ground
+    var groundGrad = ctx.createLinearGradient(0, GROUND_Y, 0, H);
+    groundGrad.addColorStop(0, "#231310");
+    groundGrad.addColorStop(1, "#0d0705");
+    ctx.fillStyle = groundGrad;
+    ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+
+    // flowing lava rivers cutting across the rock
+    var now = performance.now();
+    ctx.save();
+    ctx.shadowColor = "#ff3d1f";
+    ctx.shadowBlur = 10;
+    var riverYs = [GROUND_Y + (H - GROUND_Y) * 0.35, GROUND_Y + (H - GROUND_Y) * 0.68];
+    for (var ri = 0; ri < riverYs.length; ri++) {
+      ctx.strokeStyle = ri === 0 ? "rgba(255, 138, 30, 0.85)" : "rgba(255, 61, 31, 0.8)";
+      ctx.lineWidth = ri === 0 ? 7 : 10;
+      ctx.beginPath();
+      for (var x = 0; x <= W; x += 10) {
+        var wobble = Math.sin(x * 0.03 + now * 0.0015 + ri * 2) * 14;
+        var y = riverYs[ri] + wobble;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawBackground() {
+    var id = currentWorld && currentWorld.id;
+    if (id === "airport") drawAirportBackground();
+    else if (id === "rainy") drawRainyBackground();
+    else if (id === "desert") drawDesertBackground();
+    else drawField(); // windy + fallback
+  }
+
+  function drawAirportBackground() {
+    // Death Star -- the trench floor of a moon-sized battle station, adrift in space
+    ctx.fillStyle = "#04050a";
+    ctx.fillRect(0, 0, W, GROUND_Y);
+
+    // a stable, non-flickering starfield (deterministic positions, not re-randomized per frame)
+    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+    for (var si = 0; si < 50; si++) {
+      var sx = (si * 97 + 53) % W;
+      var sy = (si * 53 + 17) % Math.floor(GROUND_Y * 0.85);
+      ctx.fillRect(sx, sy, (si % 5 === 0) ? 2 : 1, (si % 5 === 0) ? 2 : 1);
+    }
+
+    drawCapitalShip();
+
+    // the curvature of the station's hull, dropping away on the horizon
+    ctx.save();
+    ctx.strokeStyle = "rgba(140, 150, 160, 0.4)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(W / 2, GROUND_Y + 900, 900, Math.PI * 1.32, Math.PI * 1.68);
+    ctx.stroke();
+    ctx.restore();
+
+    // a dim red glow on the horizon -- the distant superlaser dish
+    var laserGlow = ctx.createRadialGradient(W * 0.78, GROUND_Y - 6, 4, W * 0.78, GROUND_Y - 6, 70);
+    laserGlow.addColorStop(0, "rgba(255, 40, 40, 0.4)");
+    laserGlow.addColorStop(1, "rgba(255, 40, 40, 0)");
+    ctx.fillStyle = laserGlow;
+    ctx.fillRect(W * 0.78 - 70, GROUND_Y - 76, 140, 90);
+
+    // grey trench floor panels
+    var groundGrad = ctx.createLinearGradient(0, GROUND_Y, 0, H);
+    groundGrad.addColorStop(0, "#2a2d33");
+    groundGrad.addColorStop(1, "#14151a");
+    ctx.fillStyle = groundGrad;
+    ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+
+    ctx.strokeStyle = "rgba(180, 190, 200, 0.18)";
+    ctx.lineWidth = 1;
+    for (var px = 0; px < W; px += 56) {
+      ctx.beginPath();
+      ctx.moveTo(px, GROUND_Y);
+      ctx.lineTo(px, H);
+      ctx.stroke();
+    }
+    for (var py = GROUND_Y + 18; py < H; py += 26) {
+      ctx.beginPath();
+      ctx.moveTo(0, py);
+      ctx.lineTo(W, py);
+      ctx.stroke();
+    }
+
+    // a glowing green power conduit running down the trench
+    ctx.save();
+    ctx.shadowColor = "#39ff6a";
+    ctx.shadowBlur = 10;
+    ctx.strokeStyle = "rgba(57, 255, 106, 0.85)";
+    ctx.lineWidth = 5;
+    ctx.setLineDash([22, 18]);
+    ctx.beginPath();
+    ctx.moveTo(W / 2, GROUND_Y);
+    ctx.lineTo(W / 2, H);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  function drawRainyBackground() {
+    var skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+    skyGrad.addColorStop(0, "#06050f");
+    skyGrad.addColorStop(1, "#1a1030");
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, W, GROUND_Y);
+
+    // distant hazy skyline -- the metropolis stretching to the horizon
+    ctx.save();
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = "#2c2348";
+    for (var fi = 0; fi < bgDecor.farBuildings.length; fi++) {
+      var fb = bgDecor.farBuildings[fi];
+      ctx.fillRect(fb.x, GROUND_Y - fb.h, fb.w, fb.h);
+    }
+    ctx.restore();
+
+    // a thin band of atmospheric haze between the far and near skylines
+    var hazeGrad = ctx.createLinearGradient(0, GROUND_Y - 140, 0, GROUND_Y);
+    hazeGrad.addColorStop(0, "rgba(139, 92, 246, 0)");
+    hazeGrad.addColorStop(1, "rgba(139, 92, 246, 0.18)");
+    ctx.fillStyle = hazeGrad;
+    ctx.fillRect(0, GROUND_Y - 140, W, 140);
+
+    // near skyline -- tall glowing towers with lit windows, the city proper
+    var windowColors = ["rgba(255, 221, 150, 0.85)", "rgba(41, 224, 255, 0.8)", "rgba(255, 43, 214, 0.7)"];
+    for (var i = 0; i < bgDecor.buildings.length; i++) {
+      var b = bgDecor.buildings[i];
+      var top = GROUND_Y - b.h;
+      ctx.fillStyle = b.color;
+      ctx.fillRect(b.x, top, b.w, b.h);
+      ctx.strokeStyle = "rgba(139, 92, 246, 0.3)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(b.x, top, b.w, b.h);
+
+      var wCols = Math.max(1, Math.floor(b.w / 14));
+      var wRows = Math.max(1, Math.floor(b.h / 18));
+      var wColor = windowColors[i % windowColors.length];
+      ctx.save();
+      ctx.shadowColor = wColor;
+      ctx.shadowBlur = 3;
+      ctx.fillStyle = wColor;
+      for (var r = 0; r < wRows; r++) {
+        for (var c = 0; c < wCols; c++) {
+          if ((r * 3 + c + i) % 4 === 0) continue; // a few dark windows for texture
+          ctx.fillRect(b.x + 4 + c * 14, top + 6 + r * 18, 6, 9);
+        }
+      }
+      ctx.restore();
+    }
+
+    var lightColors = ["rgba(139, 92, 246, 0.5)", "rgba(255, 43, 214, 0.45)", "rgba(41, 224, 255, 0.45)"];
+    for (var li2 = 0; li2 < bgDecor.lights.length; li2++) {
+      var l = bgDecor.lights[li2];
+      var glow = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
+      var lc = lightColors[li2 % lightColors.length];
+      glow.addColorStop(0, lc);
+      glow.addColorStop(1, "rgba(139, 92, 246, 0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2);
+    }
+
+    var groundGrad = ctx.createLinearGradient(0, GROUND_Y, 0, H);
+    groundGrad.addColorStop(0, "#160f28");
+    groundGrad.addColorStop(1, "#07050e");
+    ctx.fillStyle = groundGrad;
+    ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+
+    // wet-asphalt neon reflections beneath each light
+    ctx.save();
+    for (var li = 0; li < bgDecor.lights.length; li++) {
+      var rl = bgDecor.lights[li];
+      var rc = lightColors[li % lightColors.length];
+      var refl = ctx.createLinearGradient(0, GROUND_Y, 0, GROUND_Y + 70);
+      refl.addColorStop(0, rc);
+      refl.addColorStop(1, "rgba(139, 92, 246, 0)");
+      ctx.fillStyle = refl;
+      ctx.fillRect(rl.x - 30, GROUND_Y, 60, 70);
+    }
+    ctx.restore();
+  }
+
+  function drawDesertBackground() {
+    var skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+    skyGrad.addColorStop(0, "#1a0e3a");
+    skyGrad.addColorStop(0.5, "#7a2a5e");
+    skyGrad.addColorStop(1, "#ff8a3d");
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, W, GROUND_Y);
+
+    // Tatooine's twin suns, low on the horizon
+    var sunY = GROUND_Y * 0.58;
+    var sun1X = W * 0.6, sun2X = W * 0.71;
+
+    ctx.save();
+    var glow1 = ctx.createRadialGradient(sun1X, sunY, 4, sun1X, sunY, 90);
+    glow1.addColorStop(0, "rgba(255, 235, 200, 0.6)");
+    glow1.addColorStop(1, "rgba(255, 235, 200, 0)");
+    ctx.fillStyle = glow1;
+    ctx.fillRect(sun1X - 90, sunY - 90, 180, 180);
+
+    var glow2 = ctx.createRadialGradient(sun2X, sunY, 3, sun2X, sunY, 60);
+    glow2.addColorStop(0, "rgba(255, 179, 71, 0.55)");
+    glow2.addColorStop(1, "rgba(255, 179, 71, 0)");
+    ctx.fillStyle = glow2;
+    ctx.fillRect(sun2X - 60, sunY - 60, 120, 120);
+
+    ctx.shadowColor = "#ffe9c4";
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = "#fff6e6";
+    ctx.beginPath();
+    ctx.arc(sun1X, sunY, 24, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.shadowColor = "#ffb347";
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = "#ffd9a0";
+    ctx.beginPath();
+    ctx.arc(sun2X, sunY, 15, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    var sandGrad = ctx.createLinearGradient(0, GROUND_Y, 0, H);
+    sandGrad.addColorStop(0, "#3a2a1a");
+    sandGrad.addColorStop(1, "#160f0a");
+    ctx.fillStyle = sandGrad;
+    ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+
+    // amber rim-light on the dune ridges
+    ctx.save();
+    ctx.shadowColor = "#ffb347";
+    ctx.shadowBlur = 8;
+    ctx.strokeStyle = "rgba(255, 179, 71, 0.55)";
+    ctx.lineWidth = 2;
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    for (var i = 0; i < bgDecor.dunes.length; i++) {
+      var d = bgDecor.dunes[i];
+      ctx.beginPath();
+      ctx.ellipse(d.x, GROUND_Y, d.w / 2, d.h, 0, Math.PI, 0, false);
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    var now = performance.now();
+    ctx.save();
+    ctx.shadowColor = "#ff8a3d";
+    ctx.shadowBlur = 4;
+    ctx.strokeStyle = "rgba(255, 179, 71, 0.4)";
+    ctx.lineWidth = 1;
+    for (var row = 0; row < 3; row++) {
+      var y = GROUND_Y - 6 - row * 5;
+      ctx.beginPath();
+      for (var x = 0; x <= W; x += 8) {
+        var wobble = Math.sin(x * 0.05 + now * 0.004 + row) * 2;
+        if (x === 0) ctx.moveTo(x, y + wobble);
+        else ctx.lineTo(x, y + wobble);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawFloodlight() {
+    var cx = (GOAL.left + GOAL.right) / 2;
+    var cy = GOAL.top - 40;
+    var grad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 170);
+    grad.addColorStop(0, "rgba(139, 92, 246, 0.4)");
+    grad.addColorStop(1, "rgba(139, 92, 246, 0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(cx - 170, GOAL.top - 160, 340, 260);
+  }
+
+  function drawShips() {
+    for (var i = 0; i < ships.length; i++) {
+      var s = ships[i];
+      var y = OBSTACLE_Y - s.h / 2;
+      ctx.save();
+      ctx.translate(s.x, y);
+      if (s.hit) {
+        ctx.rotate(s.dir * 0.45);
+        ctx.globalAlpha = 0.55;
+      }
+
+      // engine glow trail
+      ctx.shadowColor = "#29e0ff";
+      ctx.shadowBlur = 8;
+      ctx.strokeStyle = "rgba(41, 224, 255, 0.7)";
+      ctx.lineWidth = 3;
+      for (var li = 0; li < 3; li++) {
+        ctx.beginPath();
+        ctx.moveTo(-s.dir * (s.w / 2 + 6 + li * 9), 0);
+        ctx.lineTo(-s.dir * (s.w / 2 + 18 + li * 9), 0);
+        ctx.stroke();
+      }
+
+      // sleek civilian-speeder hull
+      ctx.shadowBlur = 4;
+      ctx.shadowColor = "#9aa0a6";
+      ctx.fillStyle = "#3a3f4a";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, s.w / 2, s.h / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(41, 224, 255, 0.55)";
+      ctx.beginPath();
+      ctx.ellipse(s.dir * s.w * 0.12, -1, s.w * 0.22, s.h * 0.28, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // nav lights -- red trailing, green leading
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = "#ff4040";
+      ctx.fillStyle = "#ff4040";
+      ctx.beginPath();
+      ctx.arc(-s.dir * s.w * 0.46, 0, 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowColor = "#39ff88";
+      ctx.fillStyle = "#39ff88";
+      ctx.beginPath();
+      ctx.arc(s.dir * s.w * 0.46, 0, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+  }
+
+  function drawCapitalShip() {
+    // a huge Star Destroyer looming in the starfield -- purely decorative
+    var cx = W * 0.78, cy = GROUND_Y * 0.22, len = W * 0.46;
+    var backX = cx - len / 2, frontX = cx + len / 2;
+    var backTopY = cy, frontTopY = cy - len * 0.05;
+
+    ctx.save();
+
+    // main wedge hull
+    ctx.shadowColor = "rgba(170, 200, 255, 0.4)";
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = "#1c2026";
+    ctx.strokeStyle = "rgba(170, 200, 255, 0.35)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(backX, backTopY);
+    ctx.lineTo(frontX, frontTopY);
+    ctx.lineTo(cx + len * 0.18, cy + len * 0.07);
+    ctx.lineTo(backX, cy + len * 0.04);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // longitudinal hull plating seams, parallel to the dorsal edge
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = "rgba(170, 200, 255, 0.18)";
+    ctx.lineWidth = 1;
+    for (var hl = 1; hl <= 3; hl++) {
+      var t = hl / 4;
+      ctx.beginPath();
+      ctx.moveTo(backX, lerp(backTopY, cy + len * 0.04, t));
+      ctx.lineTo(frontX - len * 0.1, lerp(frontTopY, cy + len * 0.04, t) + len * 0.01);
+      ctx.stroke();
+    }
+
+    // twin command towers rising off the dorsal hull, toward the rear
+    var towerX = backX + len * 0.2;
+    var towerTopY = lerp(backTopY, frontTopY, 0.2);
+    ctx.fillStyle = "#22262d";
+    ctx.strokeStyle = "rgba(170, 200, 255, 0.4)";
+    ctx.fillRect(towerX - 9, towerTopY - 13, 7, 13);
+    ctx.strokeRect(towerX - 9, towerTopY - 13, 7, 13);
+    ctx.fillRect(towerX, towerTopY - 9, 7, 9);
+    ctx.strokeRect(towerX, towerTopY - 9, 7, 9);
+    ctx.shadowColor = "#aac8ff";
+    ctx.shadowBlur = 4;
+    ctx.fillStyle = "rgba(170, 200, 255, 0.8)";
+    ctx.fillRect(towerX - 7, towerTopY - 10, 2, 2);
+    ctx.fillRect(towerX + 2, towerTopY - 6, 2, 2);
+
+    // hull running lights
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(190, 210, 255, 0.55)";
+    for (var wi = 0; wi < 18; wi++) {
+      var wx = backX + len * 0.08 + (wi * 1.7 % (len * 0.55));
+      var wy = cy - 3 + Math.sin(wi * 2.1) * 4;
+      ctx.fillRect(wx, wy, 1.5, 1.5);
+    }
+
+    // blue-white engine glow along the flat rear edge
+    for (var ei = 0; ei < 3; ei++) {
+      var ey = backTopY + (ei + 1) * (len * 0.04 - 2) / 4 + 2;
+      var glow = ctx.createRadialGradient(backX, ey, 0.5, backX, ey, 9);
+      glow.addColorStop(0, "rgba(180, 210, 255, 0.9)");
+      glow.addColorStop(1, "rgba(120, 170, 255, 0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(backX - 9, ey - 9, 18, 18);
+    }
+
+    ctx.restore();
+  }
+
+  function drawTieFighters() {
+    var now = performance.now();
+    for (var i = 0; i < tieFighters.length; i++) {
+      var f = tieFighters[i];
+      var fy = f.y + Math.sin(now * 0.003 + f.bobPhase) * 14;
+      ctx.save();
+      ctx.translate(f.x, fy);
+
+      // the iconic hexagonal solar-panel wings, struts, and round cockpit pod
+      ctx.shadowColor = "#9aa4b0";
+      ctx.shadowBlur = 3;
+      ctx.strokeStyle = "rgba(180, 190, 200, 0.7)";
+      ctx.lineWidth = 1.5;
+      ctx.fillStyle = "#15171a";
+      drawHexPanel(-15, 0, 9);
+      drawHexPanel(15, 0, 9);
+
+      ctx.beginPath();
+      ctx.moveTo(-15, 0);
+      ctx.lineTo(15, 0);
+      ctx.stroke();
+
+      ctx.shadowBlur = 4;
+      ctx.fillStyle = "#3a3f46";
+      ctx.beginPath();
+      ctx.arc(0, 0, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      if (now < f.flashUntil) {
+        ctx.shadowColor = "#bdffce";
+        ctx.shadowBlur = 16;
+        ctx.fillStyle = "#e9fff0";
+        ctx.beginPath();
+        ctx.arc(f.dir * 7, 0, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  function drawHexPanel(cx, cy, r) {
+    ctx.beginPath();
+    for (var a = 0; a < 6; a++) {
+      var ang = (Math.PI / 3) * a - Math.PI / 6;
+      var px = cx + Math.cos(ang) * r;
+      var py = cy + Math.sin(ang) * r;
+      if (a === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawBlasts() {
+    for (var i = 0; i < blasts.length; i++) {
+      var b = blasts[i];
+      var ang = Math.atan2(b.vy, b.vx);
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(ang);
+      ctx.shadowColor = "#39ff6a";
+      ctx.shadowBlur = 12;
+      ctx.strokeStyle = "rgba(180, 255, 200, 0.4)";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(-26, 0);
+      ctx.lineTo(-8, 0);
+      ctx.stroke();
+      ctx.fillStyle = "#bdffce";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, b.w / 2, b.h / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function drawTumbleweeds() {
+    var now = performance.now();
+    for (var i = 0; i < tumbleweeds.length; i++) {
+      var tw = tumbleweeds[i];
+      if (tw.hit) {
+        drawTumbleweedBurst(tw, now);
+        continue;
+      }
+      drawDroid(tw.x, OBSTACLE_Y - tw.r, tw.r, tw.spin, false);
+    }
+  }
+
+  function drawDroid(cx, cy, r, spin, damaged) {
+    // a small rolling BB-8-style droid -- body tumbles with `spin`,
+    // but the dome stays gyro-stabilized upright regardless of body roll.
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    ctx.save();
+    ctx.rotate(spin);
+    ctx.shadowColor = "#ff8a3d";
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = "#f4f0e6";
+    ctx.strokeStyle = "#b0aa9a";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // BB-8's scattered orange panel discs
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#ff8a1f";
+    ctx.beginPath();
+    ctx.arc(-r * 0.42, -r * 0.1, r * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(r * 0.5, r * 0.35, r * 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(r * 0.05, -r * 0.6, r * 0.22, 0, Math.PI * 2);
+    ctx.fill();
+
+    // thin grey seam rings for panel-line detail
+    ctx.strokeStyle = "rgba(120, 110, 95, 0.5)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.97, 0.4, 2.2);
+    ctx.stroke();
+    ctx.restore();
+
+    // gyro-stabilized dome, white with a single orange stripe
+    ctx.fillStyle = "#f4f0e6";
+    ctx.strokeStyle = "#b0aa9a";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(0, -r * 0.62, r * 0.36, Math.PI, 0, false);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#ff8a1f";
+    ctx.fillRect(-r * 0.36, -r * 0.66, r * 0.72, r * 0.1);
+
+    ctx.shadowColor = damaged ? "#ff4040" : "#2b2b2b";
+    ctx.shadowBlur = damaged ? 6 : 0;
+    ctx.fillStyle = damaged ? "#ff4040" : "#2b2b2b";
+    ctx.beginPath();
+    ctx.arc(-r * 0.12, -r * 0.72, r * 0.07, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawTumbleweedBurst(tw, now) {
+    // "boing" -- knocked into a little bounce arc, then settles and holds in place.
+    var BOUNCE_MS = 550;
+    var t = clamp((now - tw.hitAt) / BOUNCE_MS, 0, 1);
+    var popHeight = tw.r * 2.2;
+    var travelDist = tw.r * 1.8;
+
+    var cx = tw.hitX + tw.dir * travelDist * t;
+    var lift = popHeight * Math.sin(Math.PI * t);
+    var cy = (OBSTACLE_Y - tw.r) - lift;
+
+    drawDroid(cx, cy, tw.r, tw.spin + tw.dir * t * 6, true);
+  }
+
+  function drawGoal() {
+    var now = performance.now();
+    var glowColor = (currentWorld && currentWorld.color) || "#29e0ff";
+
+    ctx.save();
+    ctx.lineCap = "round";
+
+    // outer glow pass for the posts/crossbar
+    ctx.shadowColor = glowColor;
+    ctx.shadowBlur = 22;
+    ctx.strokeStyle = "rgba(255,255,255,0.9)";
+    ctx.lineWidth = GOAL.postThickness;
+
+    ctx.beginPath();
+    ctx.moveTo(GOAL.left, GOAL.bottom);
+    ctx.lineTo(GOAL.left, GOAL.top);
+    ctx.moveTo(GOAL.right, GOAL.bottom);
+    ctx.lineTo(GOAL.right, GOAL.top);
+    ctx.moveTo(GOAL.left, GOAL.top);
+    ctx.lineTo(GOAL.right, GOAL.top);
+    ctx.stroke();
+
+    // crisp bright core on top of the glow
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = GOAL.postThickness * 0.55;
+    ctx.stroke();
+    ctx.restore();
+
+    // net hint, with a faint shimmer so it isn't static
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,255,255,0.3)";
+    ctx.lineWidth = 1;
+    var cols = 8;
+    for (var i = 1; i < cols; i++) {
+      var shimmer = Math.sin(now * 0.002 + i) * 2;
+      var nx = GOAL.left + (i / cols) * (GOAL.right - GOAL.left) + shimmer;
+      ctx.beginPath();
+      ctx.moveTo(nx, GOAL.top);
+      ctx.lineTo(nx, GOAL.bottom);
+      ctx.stroke();
+    }
+    var rows = 4;
+    for (var j = 1; j < rows; j++) {
+      var ny = GOAL.top + (j / rows) * (GOAL.bottom - GOAL.top);
+      ctx.beginPath();
+      ctx.moveTo(GOAL.left, ny);
+      ctx.lineTo(GOAL.right, ny);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawBall(x, y, r) {
+    ctx.save();
+    ctx.shadowColor = "rgba(255,255,255,0.9)";
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeStyle = "#222222";
+    ctx.lineWidth = Math.max(1, r * 0.08);
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // simple pentagon "seam" in the middle for a soccer-ball look
+    ctx.fillStyle = "#222222";
+    ctx.beginPath();
+    var sides = 5;
+    var pr = r * 0.38;
+    for (var i = 0; i < sides; i++) {
+      var ang = (Math.PI * 2 * i) / sides - Math.PI / 2;
+      var px = x + pr * Math.cos(ang);
+      var py = y + pr * Math.sin(ang);
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawLeg(progress) {
+    // cartoon leg winding back as the player holds the mouse down
+    var hipX = BALL_START.x;
+    var hipY = BALL_START.y + ball.r * 0.7;
+    var maxAngle = Math.PI * 0.42;
+    var angle = progress * maxAngle;
+    var legLen = ball.r * 1.7;
+
+    var footX = hipX - Math.sin(angle) * legLen * 0.5;
+    var footY = hipY + Math.cos(angle) * legLen;
+
+    ctx.save();
+    ctx.strokeStyle = "#e3a36b";
+    ctx.lineWidth = Math.max(6, ball.r * 0.45);
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(hipX, hipY);
+    ctx.lineTo(footX, footY);
+    ctx.stroke();
+
+    // shoe
+    ctx.fillStyle = "#222222";
+    ctx.beginPath();
+    ctx.ellipse(footX, footY, 9, 6, angle, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawBallTrail() {
+    if (!ballTrail.length) return;
+    ctx.save();
+    for (var i = 0; i < ballTrail.length; i++) {
+      var p = ballTrail[i];
+      var t = (i + 1) / ballTrail.length; // older points fade out
+      ctx.globalAlpha = t * 0.35;
+      ctx.shadowColor = "#29e0ff";
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = "#29e0ff";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawTrajectoryPreview() {
+    // straight aim line only -- shows where the player is pointing, NOT
+    // where wind will end up pushing the ball. The kicked ball still flies
+    // a parabola and gets blown off this line, so the wind is visible.
+    var aimTargetX = clamp(BALL_START.x + clamp(aimX - BALL_START.x, -260, 260), 60, W - 60);
+
+    ctx.save();
+    ctx.setLineDash([6, 8]);
+    ctx.shadowColor = "#29e0ff";
+    ctx.shadowBlur = 8;
+    ctx.strokeStyle = "rgba(41, 224, 255, 0.75)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(BALL_START.x, BALL_START.y - ball.r);
+    ctx.lineTo(aimTargetX, GOAL.bottom);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawLavaVents() {
+    var now = performance.now();
+    for (var i = 0; i < lavaVents.length; i++) {
+      var v = lavaVents[i];
+      if (v.state === "erupting") {
+        var t = clamp((now - v.eruptStartAt) / 200, 0, 1); // quick rise, then holds at full height
+        var colH = v.h * t;
+        ctx.save();
+        ctx.shadowColor = "#ff3d1f";
+        ctx.shadowBlur = 18;
+        var grad = ctx.createLinearGradient(0, GROUND_Y, 0, GROUND_Y - colH);
+        grad.addColorStop(0, "#ffb347");
+        grad.addColorStop(0.5, "#ff5f1f");
+        grad.addColorStop(1, "rgba(255, 61, 31, 0)");
+        ctx.fillStyle = grad;
+        var flicker = Math.sin(now * 0.03 + v.x) * 4;
+        ctx.beginPath();
+        ctx.moveTo(v.x - v.w / 2 + flicker, GROUND_Y);
+        ctx.lineTo(v.x - v.w / 4, GROUND_Y - colH);
+        ctx.lineTo(v.x + v.w / 4, GROUND_Y - colH);
+        ctx.lineTo(v.x + v.w / 2 - flicker, GROUND_Y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      } else {
+        // warning telegraph -- a pulsing triangle, ~1s before this spot erupts
+        var pulse = 0.6 + Math.sin(now * 0.018) * 0.4;
+        ctx.save();
+        ctx.shadowColor = "#ff3d1f";
+        ctx.shadowBlur = 10 * pulse;
+        ctx.fillStyle = "rgba(255, 61, 31, " + (0.5 + 0.4 * pulse) + ")";
+        ctx.strokeStyle = "#ffb347";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(v.x, GROUND_Y - 22);
+        ctx.lineTo(v.x - 17, GROUND_Y + 2);
+        ctx.lineTo(v.x + 17, GROUND_Y + 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#fff6e6";
+        ctx.font = "bold 16px 'Orbitron', Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("!", v.x, GROUND_Y - 9);
+        ctx.restore();
+      }
+    }
+  }
+
+  function drawWindIndicator() {
+    if (!isWindEnabled()) return;
+
+    var pointingRight = wind.dir === 1;
+    var onLeftSide = pointingRight; // blowing right -> arrow on left; blowing left -> arrow on right
+    var cx = onLeftSide ? 95 : W - 95;
+    var cy = 86;
+
+    var shaftHalf = 15;
+    var bodyLen = 62;
+    var headLen = 30;
+    var headHalf = 21;
+
+    var backX = pointingRight ? cx - bodyLen / 2 : cx + bodyLen / 2;
+    var headBaseX = pointingRight ? cx + bodyLen / 2 : cx - bodyLen / 2;
+    var tipX = pointingRight ? headBaseX + headLen : headBaseX - headLen;
+
+    var accent = (currentWorld && currentWorld.color) || "#29e0ff";
+
+    ctx.save();
+    ctx.shadowColor = accent;
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = "rgba(10, 8, 20, 0.7)";
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(backX, cy - shaftHalf);
+    ctx.lineTo(headBaseX, cy - shaftHalf);
+    ctx.lineTo(headBaseX, cy - headHalf);
+    ctx.lineTo(tipX, cy);
+    ctx.lineTo(headBaseX, cy + headHalf);
+    ctx.lineTo(headBaseX, cy + shaftHalf);
+    ctx.lineTo(backX, cy + shaftHalf);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 13px 'Rajdhani', Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(Math.round(wind.speed) + " MPH", (backX + headBaseX) / 2, cy + 1);
+    ctx.restore();
+  }
+
+  function drawPowerMeter(fillLevel) {
+    var trackW = 26;
+    var trackX = W - 60;
+    var trackTop = 120;
+    var trackBottom = H - 100;
+    var trackH = trackBottom - trackTop;
+
+    ctx.save();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 13px 'Orbitron', 'Trebuchet MS', Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.shadowColor = "rgba(41, 224, 255, 0.8)";
+    ctx.shadowBlur = 8;
+    ctx.fillText("POWER", trackX + trackW / 2, trackTop - 12);
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = "rgba(8, 6, 16, 0.7)";
+    ctx.fillRect(trackX, trackTop, trackW, trackH);
+
+    var fillClamped = clamp(fillLevel, 0, 1);
+    if (fillClamped > 0) {
+      var fillH = trackH * fillClamped;
+      var fillY = trackBottom - fillH;
+      var gradient = ctx.createLinearGradient(0, trackBottom, 0, trackTop);
+      gradient.addColorStop(0, "#29e0ff");
+      gradient.addColorStop(0.55, "#ff2bd6");
+      gradient.addColorStop(1, "#ffe93d");
+      ctx.fillStyle = gradient;
+
+      // glow intensifies as the meter approaches full charge, with a gentle pulse
+      var pulse = fillClamped > 0.8 ? (Math.sin(performance.now() * 0.012) * 0.5 + 0.5) : 0;
+      ctx.shadowColor = "#ff2bd6";
+      ctx.shadowBlur = 6 + fillClamped * 14 + pulse * 10;
+      ctx.fillRect(trackX, fillY, trackW, fillH);
+      ctx.shadowBlur = 0;
+    }
+
+    ctx.strokeStyle = "rgba(255,255,255,0.75)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(trackX, trackTop, trackW, trackH);
+
+    ctx.restore();
+  }
+
+  function draw() {
+    var id = currentWorld && currentWorld.id;
+    ctx.clearRect(0, 0, W, H);
+    drawBackground();
+    if (id === "airport") drawTieFighters();
+    drawGoal();
+    if (id === "windy") drawLavaVents();
+    if (id === "rainy") drawFloodlight();
+    if (id === "desert") drawTumbleweeds();
+    if (id === "rainy") drawShips();
+    if (id === "airport") drawBlasts();
+    drawWindIndicator();
+    drawPowerMeter(state === "charging" ? getPowerLevel(performance.now()) : 0);
+
+    if (state === "flying" && flight) {
+      var now = performance.now();
+      var t = (now - flight.startTime) / flight.duration;
+      if (t >= 1) {
+        t = 1;
+      }
+      var bx = lerp(flight.startX, flight.aimX, t) + flight.windDrift * t;
+      var by = lerp(flight.startY, flight.endY, t) - flight.arcHeight * Math.sin(Math.PI * t);
+      var br = lerp(flight.startR, flight.endR, t);
+
+      ballTrail.push({ x: bx, y: by, r: br });
+      if (ballTrail.length > 14) ballTrail.shift();
+
+      var hitObstacle = (id === "desert" || id === "windy" || id === "rainy" || id === "airport")
+        ? checkObstacleCollision(bx, by, br) : null;
+      if (hitObstacle) {
+        hitFreezeBall = { x: bx, y: by, r: br };
+        drawBallTrail();
+        drawBall(bx, by, br);
+        spawnHitSpark(bx, by);
+        drawParticles();
+        if (id === "desert") {
+          hitObstacle.hit = true;
+          hitObstacle.hitAt = now;
+          hitObstacle.hitX = hitObstacle.x;
+          burstTumbleweed = hitObstacle;
+          resolveShot(true, "tumbleweed");
+        } else if (id === "windy") {
+          lavaVents = lavaVents.filter(function (v) { return v !== hitObstacle; });
+          resolveShot(true, "lava");
+        } else if (id === "rainy") {
+          hitObstacle.hit = true;
+          hitObstacle.hitAt = now;
+          hitObstacle.hitX = hitObstacle.x;
+          disabledShip = hitObstacle;
+          resolveShot(true, "ship");
+        } else if (id === "airport") {
+          blasts = blasts.filter(function (b) { return b !== hitObstacle; });
+          resolveShot(true, "blast");
+        }
+        return;
+      }
+
+      drawBallTrail();
+      drawBall(bx, by, br);
+
+      if (t >= 1) {
+        resolveShot();
+      }
+    } else if (state === "charging") {
+      var progress = clamp((performance.now() - chargeStartTime) / 1200, 0, 1);
+      drawTrajectoryPreview();
+      drawLeg(progress);
+      drawBall(ball.x, ball.y, ball.r);
+    } else if (hitFreezeBall) {
+      drawBall(hitFreezeBall.x, hitFreezeBall.y, hitFreezeBall.r);
+    } else {
+      drawBall(ball.x, ball.y, ball.r);
+    }
+
+    drawParticles();
+  }
+
+  var lastFrameTime = 0;
+  function loop() {
+    var now = performance.now();
+    var dt = lastFrameTime ? Math.min(now - lastFrameTime, 100) : 16;
+    lastFrameTime = now;
+    if (gameVisible) {
+      updateWorldDynamics(now, dt);
+      updateParticles(dt);
+      draw();
+    }
+    requestAnimationFrame(loop);
+  }
+
+  // ---------------------------------------------------------------
+  // Init
+  // ---------------------------------------------------------------
+  renderLanding();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
