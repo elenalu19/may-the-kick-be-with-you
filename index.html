@@ -978,11 +978,6 @@
     currentWorld = world;
     score = 0;
     best = getBest(world.storageKey);
-    pendo.track("world_selected", {
-      world: world.name,
-      worldId: world.id,
-      previousBest: best
-    });
     updateTopbar();
     resetBall();
     initWorldExtras(world, performance.now());
@@ -1097,13 +1092,6 @@
       arc_height: Math.round(arcHeight),
       wind_drift_px: Math.round(windDrift),
       current_score: score
-    pendo.track("shot_executed", {
-      world: currentWorld.name,
-      worldId: currentWorld.id,
-      power: Math.round(power * 100),
-      aimOffsetPx: Math.round(aimOffset),
-      windSpeedMph: wind.speed,
-      windDirection: wind.dir === 1 ? "right" : "left"
     });
   }
 
@@ -1123,21 +1111,7 @@
       if (isNewBest) {
         best = score;
         setBest(currentWorld.storageKey, best);
-        pendo.track("high_score_achieved", {
-          world: currentWorld.name,
-          worldId: currentWorld.id,
-          newBest: best,
-          previousBest: best - 1
-        });
       }
-      pendo.track("goal_scored", {
-        world: currentWorld.name,
-        worldId: currentWorld.id,
-        streak: score,
-        isNewBest: isNewBest,
-        windSpeedMph: wind.speed,
-        windDirection: wind.dir === 1 ? "right" : "left"
-      });
       spawnGoalBurst(flight.aimX + flight.windDrift, (GOAL.top + GOAL.bottom) / 2);
       showMessage("GOALLLLLL!", "goal");
 
@@ -1164,40 +1138,14 @@
     } else {
       score = 0;
       if (blockType === "tumbleweed") {
-        pendo.track("obstacle_collision", {
-          world: currentWorld.name,
-          worldId: currentWorld.id,
-          obstacleType: "tumbleweed"
-        });
         showMessage("DROID DOWN!", "hit");
       } else if (blockType === "lava") {
-        pendo.track("obstacle_collision", {
-          world: currentWorld.name,
-          worldId: currentWorld.id,
-          obstacleType: "lava"
-        });
         showMessage("ERUPTION!", "hit");
       } else if (blockType === "ship") {
-        pendo.track("obstacle_collision", {
-          world: currentWorld.name,
-          worldId: currentWorld.id,
-          obstacleType: "ship"
-        });
         showMessage("SHIP DOWN!", "hit");
       } else if (blockType === "blast") {
-        pendo.track("obstacle_collision", {
-          world: currentWorld.name,
-          worldId: currentWorld.id,
-          obstacleType: "blast"
-        });
         showMessage("BLASTED!", "hit");
       } else {
-        pendo.track("shot_missed", {
-          world: currentWorld.name,
-          worldId: currentWorld.id,
-          windSpeedMph: wind.speed,
-          windDirection: wind.dir === 1 ? "right" : "left"
-        });
         showMessage("NOOOO...", "miss");
 
         pendo.track("shot_missed", {
