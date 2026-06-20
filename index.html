@@ -301,6 +301,112 @@
     color: var(--neon-yellow);
     text-shadow: 0 0 14px rgba(255, 233, 61, 0.85), 0 0 34px rgba(255, 233, 61, 0.5), 0 4px 0 rgba(0,0,0,0.4);
   }
+
+  /* ---------- How to Play ---------- */
+  #howToPlayBtn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    padding: 9px 18px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(10, 8, 20, 0.65);
+    color: #fff;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 999px;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 0 12px -2px rgba(41, 224, 255, 0.7);
+    transition: box-shadow 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+
+  #howToPlayBtn:hover {
+    background: rgba(10, 8, 20, 0.85);
+    box-shadow: 0 0 22px 0px rgba(41, 224, 255, 0.95);
+    transform: translateY(-1px);
+  }
+
+  #howToPlayOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 4, 10, 0.78);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    animation: screenFadeIn 0.18s ease both;
+  }
+
+  #howToPlayCard {
+    width: min(440px, 88vw);
+    max-height: 80vh;
+    overflow-y: auto;
+    background: linear-gradient(160deg, rgba(20, 16, 36, 0.95), rgba(10, 8, 20, 0.95));
+    border: 2px solid var(--neon-cyan);
+    border-radius: 16px;
+    box-shadow: 0 0 30px -4px rgba(41, 224, 255, 0.6), 0 14px 40px rgba(0,0,0,0.55);
+    padding: 26px 26px 22px 26px;
+    color: #fff;
+    text-align: left;
+    position: relative;
+  }
+
+  #howToPlayCard h2 {
+    font-family: 'Orbitron', 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 0 0 16px 0;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(41, 224, 255, 0.6);
+  }
+
+  #howToPlayCard ol {
+    margin: 0;
+    padding-left: 22px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #d8d8e6;
+  }
+
+  #howToPlayCard li {
+    margin-bottom: 10px;
+  }
+
+  #howToPlayCard li span {
+    color: var(--neon-yellow);
+  }
+
+  #howToPlayClose {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-magenta);
+    background: rgba(10, 8, 20, 0.7);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px -2px rgba(255, 43, 214, 0.7);
+    transition: box-shadow 0.18s ease, transform 0.18s ease;
+  }
+
+  #howToPlayClose:hover {
+    box-shadow: 0 0 18px 0px rgba(255, 43, 214, 0.95);
+    transform: translateY(-1px);
+  }
 </style>
 <script>
 (function(apiKey){
@@ -316,9 +422,26 @@
 
   <!-- LANDING SCREEN -->
   <div id="landing">
+    <button id="howToPlayBtn">How to Play</button>
     <h1>MAY THE KICK BE WITH YOU</h1>
     <p class="tagline">Choose Your World</p>
     <div id="worldGrid"></div>
+  </div>
+
+  <!-- HOW TO PLAY MODAL -->
+  <div id="howToPlayOverlay" class="hidden">
+    <div id="howToPlayCard">
+      <button id="howToPlayClose" aria-label="Close">&times;</button>
+      <h2>HOW TO PLAY</h2>
+      <ol>
+        <li>Pick a <span>world</span> to start kicking in.</li>
+        <li><span>Click and hold</span> on the ball to start charging your shot.</li>
+        <li>While holding, <span>move the mouse</span> left/right to aim — watch the dashed line.</li>
+        <li><span>Release</span> to kick. The longer you hold, the more power and arc you get.</li>
+        <li>Get the ball between the posts to <span>score</span> — watch out for wind and world obstacles that can block your shot.</li>
+        <li>Missing or getting blocked <span>resets your streak</span>, so chain goals for a new best score.</li>
+      </ol>
+    </div>
   </div>
 
   <!-- GAME SCREEN -->
@@ -347,7 +470,7 @@
   // ---------------------------------------------------------------
   var WORLDS = [
     { id: "windy",   name: "Mustafar",   storageKey: "windy",   color: "#ff3d1f" },
-    { id: "airport", name: "Death Star", storageKey: "airport", color: "#39ff6a" },
+    { id: "airport", name: "Outer Rim", storageKey: "airport", color: "#39ff6a" },
     { id: "rainy",   name: "Coruscant",  storageKey: "rain",    color: "#8b5cf6" },
     { id: "desert",  name: "Tatooine",   storageKey: "desert",  color: "#ffb347" }
   ];
@@ -382,6 +505,9 @@
   var bestLabelEl = document.getElementById("bestLabel");
   var scoreLabelEl = document.getElementById("scoreLabel");
   var changeWorldBtn = document.getElementById("changeWorldBtn");
+  var howToPlayBtn = document.getElementById("howToPlayBtn");
+  var howToPlayOverlay = document.getElementById("howToPlayOverlay");
+  var howToPlayClose = document.getElementById("howToPlayClose");
   var messageEl = document.getElementById("message");
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
@@ -500,8 +626,8 @@
   var lavaVents = []; // Mustafar's eruption hazards (transient): { x, w, h, state, warnEndAt, eruptStartAt, eruptEndAt }
   var nextEruptionAt = 0; // when the next randomized eruption telegraph spawns
   var ships = []; // Coruscant traffic obstacles: { x, dir, speed, w, h, hit, hitAt, hitX }
-  var blasts = []; // Death Star TIE blaster bolts: { x, y, vx, vy, w, h, hit, hitAt, hitX }
-  var tieFighters = []; // Death Star's mobile fighters: { x, y, dir, speed, bobPhase, flashUntil }
+  var blasts = []; // Outer Rim TIE blaster bolts: { x, y, vx, vy, w, h, hit, hitAt, hitX }
+  var tieFighters = []; // Outer Rim's mobile fighters: { x, y, dir, speed, bobPhase, flashUntil }
 
   var nextWindShiftAt = 0;
   var nextBlastAt = 0;
@@ -846,6 +972,11 @@
     currentWorld = world;
     score = 0;
     best = getBest(world.storageKey);
+    pendo.track("world_selected", {
+      world: world.name,
+      worldId: world.id,
+      previousBest: best
+    });
     updateTopbar();
     resetBall();
     initWorldExtras(world, performance.now());
@@ -872,6 +1003,16 @@
   }
 
   changeWorldBtn.addEventListener("click", backToLanding);
+
+  howToPlayBtn.addEventListener("click", function () {
+    howToPlayOverlay.classList.remove("hidden");
+  });
+  howToPlayClose.addEventListener("click", function () {
+    howToPlayOverlay.classList.add("hidden");
+  });
+  howToPlayOverlay.addEventListener("click", function (evt) {
+    if (evt.target === howToPlayOverlay) howToPlayOverlay.classList.add("hidden");
+  });
 
   function updateTopbar() {
     bestLabelEl.textContent = "Best: " + best;
@@ -950,6 +1091,13 @@
       arc_height: Math.round(arcHeight),
       wind_drift_px: Math.round(windDrift),
       current_score: score
+    pendo.track("shot_executed", {
+      world: currentWorld.name,
+      worldId: currentWorld.id,
+      power: Math.round(power * 100),
+      aimOffsetPx: Math.round(aimOffset),
+      windSpeedMph: wind.speed,
+      windDirection: wind.dir === 1 ? "right" : "left"
     });
   }
 
@@ -969,7 +1117,21 @@
       if (isNewBest) {
         best = score;
         setBest(currentWorld.storageKey, best);
+        pendo.track("high_score_achieved", {
+          world: currentWorld.name,
+          worldId: currentWorld.id,
+          newBest: best,
+          previousBest: best - 1
+        });
       }
+      pendo.track("goal_scored", {
+        world: currentWorld.name,
+        worldId: currentWorld.id,
+        streak: score,
+        isNewBest: isNewBest,
+        windSpeedMph: wind.speed,
+        windDirection: wind.dir === 1 ? "right" : "left"
+      });
       spawnGoalBurst(flight.aimX + flight.windDrift, (GOAL.top + GOAL.bottom) / 2);
       showMessage("GOALLLLLL!", "goal");
 
@@ -996,14 +1158,40 @@
     } else {
       score = 0;
       if (blockType === "tumbleweed") {
+        pendo.track("obstacle_collision", {
+          world: currentWorld.name,
+          worldId: currentWorld.id,
+          obstacleType: "tumbleweed"
+        });
         showMessage("DROID DOWN!", "hit");
       } else if (blockType === "lava") {
+        pendo.track("obstacle_collision", {
+          world: currentWorld.name,
+          worldId: currentWorld.id,
+          obstacleType: "lava"
+        });
         showMessage("ERUPTION!", "hit");
       } else if (blockType === "ship") {
+        pendo.track("obstacle_collision", {
+          world: currentWorld.name,
+          worldId: currentWorld.id,
+          obstacleType: "ship"
+        });
         showMessage("SHIP DOWN!", "hit");
       } else if (blockType === "blast") {
+        pendo.track("obstacle_collision", {
+          world: currentWorld.name,
+          worldId: currentWorld.id,
+          obstacleType: "blast"
+        });
         showMessage("BLASTED!", "hit");
       } else {
+        pendo.track("shot_missed", {
+          world: currentWorld.name,
+          worldId: currentWorld.id,
+          windSpeedMph: wind.speed,
+          windDirection: wind.dir === 1 ? "right" : "left"
+        });
         showMessage("NOOOO...", "miss");
 
         pendo.track("shot_missed", {
@@ -1227,7 +1415,7 @@
   }
 
   function drawAirportBackground() {
-    // Death Star -- the trench floor of a moon-sized battle station, adrift in space
+    // Outer Rim -- the trench floor of a moon-sized battle station, adrift in space
     ctx.fillStyle = "#04050a";
     ctx.fillRect(0, 0, W, GROUND_Y);
 
